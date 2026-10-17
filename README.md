@@ -7,6 +7,7 @@ Small, practical PowerShell scripts for everyday Tier 1 / helpdesk tasks. Each s
 | Script | What it does | Needs admin? |
 |--------|--------------|--------------|
 | `Get-SystemInfo.ps1` | Computer name, OS, CPU, RAM, uptime, disks — first thing you check on any ticket | No |
+| `Get-TopProcesses.ps1` | Top 10 processes by CPU and memory — first check for "computer is slow" | No |
 | `Get-DiskSpaceReport.ps1` | Flags any drive with low free space (red/green output) | No |
 | `Test-NetworkConnectivity.ps1` | Step-by-step "no internet" diagnosis: IP → gateway → internet → DNS | No |
 | `Restart-PrintSpooler.ps1` | Clears stuck print jobs by restarting the spooler | **Yes** |
@@ -29,7 +30,7 @@ Set-ExecutionPolicy -Scope Process -Bypass
 
 ## Try it: a typical ticket workflow
 
-1. User reports "my computer is slow" → run `Get-SystemInfo.ps1`, then `Get-DiskSpaceReport.ps1`
+1. User reports "my computer is slow" → run `Get-SystemInfo.ps1`, then `Get-TopProcesses.ps1`, then `Get-DiskSpaceReport.ps1`
 2. Disk is full → run `Clear-TempFiles.ps1` to recover space
 3. User reports "can't print" → run `Restart-PrintSpooler.ps1`
 4. User reports "no internet" → run `Test-NetworkConnectivity.ps1` — the first failed step tells you where the problem is
@@ -41,6 +42,7 @@ Set-ExecutionPolicy -Scope Process -Bypass
 - `-WhatIf` / `SupportsShouldProcess` so destructive scripts can be previewed safely
 - `#Requires -RunAsAdministrator` to fail fast instead of halfway through
 - CSV-driven bulk operations — the same pattern real onboarding automation uses
+- `Sort-Object` plus calculated properties (`@{ Name = ...; Expression = ... }`) to reshape `Get-Process` output into readable tables
 
 ## Requirements
 
